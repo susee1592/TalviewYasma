@@ -1,4 +1,6 @@
-package demo.susee.talviewyasma
+package demo.susee.talviewyasma.post
+
+import demo.susee.talviewyasma.Result
 
 interface PostContract{
     interface View{

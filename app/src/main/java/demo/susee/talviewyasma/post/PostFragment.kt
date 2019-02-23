@@ -1,4 +1,4 @@
-package demo.susee.talviewyasma
+package demo.susee.talviewyasma.post
 
 import android.content.Context
 import android.os.Bundle
@@ -8,6 +8,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import demo.susee.talviewyasma.R
+import demo.susee.talviewyasma.Result
 import kotlinx.android.synthetic.main.fragment_post.*
 import kotlinx.android.synthetic.main.item_post.view.*
 
@@ -42,8 +44,14 @@ class PostFragment : Fragment(), PostContract.View {
 
         class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
-        override fun onCreateViewHolder(p0: ViewGroup, p1: Int): PostAdapter.MyViewHolder {
-            return MyViewHolder(LayoutInflater.from(p0.context).inflate(R.layout.item_post, p0, false))
+        override fun onCreateViewHolder(p0: ViewGroup, p1: Int): MyViewHolder {
+            return MyViewHolder(
+                LayoutInflater.from(p0.context).inflate(
+                    R.layout.item_post,
+                    p0,
+                    false
+                )
+            )
         }
 
         fun setData(result: ArrayList<Result.Post>) {
@@ -55,7 +63,7 @@ class PostFragment : Fragment(), PostContract.View {
             return res.size
         }
 
-        override fun onBindViewHolder(p0: PostAdapter.MyViewHolder, p1: Int) {
+        override fun onBindViewHolder(p0: MyViewHolder, p1: Int) {
             var post = res[p1]
             p0.itemView.title.text = post.title
         }
