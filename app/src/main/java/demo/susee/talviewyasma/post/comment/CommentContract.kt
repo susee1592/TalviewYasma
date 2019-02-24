@@ -15,7 +15,7 @@ interface CommentContract {
     }
 
     interface Presenter {
-        fun getComments()
+        fun getComments(id:Int)
 
         fun getPost(post: Result.Post)
     }

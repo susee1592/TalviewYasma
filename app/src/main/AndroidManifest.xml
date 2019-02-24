@@ -11,6 +11,10 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <activity android:name=".album.photo.PhotoDetailActivity">
+        </activity>
+        <activity android:name=".album.photo.PhotoListActivity">
+        </activity>
         <activity android:name=".post.PostDetailActivity">
         </activity>
         <activity android:name=".MainActivity">

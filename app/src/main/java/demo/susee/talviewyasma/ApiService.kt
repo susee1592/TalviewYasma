@@ -15,16 +15,22 @@ interface ApiService {
     fun getPostDetails(@Path("id") id: Int): Observable<Result.Post>
 
     @GET("posts/{id}/comments")
-    fun getComments(): Observable<ArrayList<Result.Comment>>
+    fun getComments(@Path("id") id: Int): Observable<ArrayList<Result.Comment>>
 
     @GET("albums")
     fun getAlbums(): Observable<ArrayList<Result.Album>>
 
     @GET("albums/{id}")
-    fun getPosts(@Path("id") id: Int): Observable<ArrayList<Result.Album>>
+    fun getAlbum(@Path("id") id: Int): Observable<ArrayList<Result.Album>>
 
     @GET("albums/{id}/photos")
-    fun getPhotos(): Observable<ArrayList<Result.Photo>>
+    fun getPhotos(@Path("id") id: Int): Observable<ArrayList<Result.Photo>>
+
+    @GET("users")
+    fun getAllUser(): Observable<ArrayList<Result.User>>
+
+    @GET("users/{id}")
+    fun getUser(@Path("id") id: Int): Observable<Result.User>
 
     companion object {
         fun create(): ApiService {

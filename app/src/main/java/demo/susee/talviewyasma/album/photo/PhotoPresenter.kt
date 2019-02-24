@@ -1,28 +1,27 @@
-package demo.susee.talviewyasma.post.comment
+package demo.susee.talviewyasma.album.photo
 
+import android.view.View
 import demo.susee.talviewyasma.ApiService
-import demo.susee.talviewyasma.Result
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class CommentPresenter(var view: CommentContract.View) : CommentContract.Presenter {
-    override fun getComments(id:Int) {
+class PhotoPresenter(val view: PhotoContract.View) : PhotoContract.Presenter {
+    override fun photoClicked(url: String, itemView: View) {
+        view.photoDetails(url, itemView)
+    }
+
+    override fun getPhotos(id: Int) {
         var repository = ApiService.create()
-        repository.getComments(id)
+        repository.getPhotos(id)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe({ result ->
                 if (result.size == 0)
-                    view.showNoResults()
+                    view.showNoResult()
                 else
-                    view.showComments(result)
+                    view.showPhotos(result)
             }, { error ->
                 view.showError(error.message)
             })
     }
-
-    override fun getPost(post: Result.Post) {
-        view.showPost(post)
-    }
-
 }

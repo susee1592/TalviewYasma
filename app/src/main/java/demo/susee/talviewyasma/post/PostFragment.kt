@@ -13,6 +13,7 @@ import android.widget.Toast
 import demo.susee.talviewyasma.R
 import demo.susee.talviewyasma.Result
 import demo.susee.talviewyasma.post.offline.PostRepository
+import demo.susee.talviewyasma.user.UserPresenter
 import kotlinx.android.synthetic.main.fragment_post.*
 import kotlinx.android.synthetic.main.item_post.view.*
 
@@ -106,6 +107,16 @@ class PostFragment : Fragment(), PostContract.View {
             var post = res[p1]
             p0.itemView.title.text = post.title
             p0.itemView.body.text = post.body
+            object : AsyncTask<Void, Void, Void>() {
+                override fun doInBackground(vararg voids: Void): Void? {
+                    val user = UserPresenter().getUser(post.userId)
+                    if (user != null) {
+                        p0.itemView.name.text = user.name
+                        p0.itemView.email.text = user.email
+                    }
+                    return null
+                }
+            }.execute()
             p0.itemView.setOnClickListener { presenter.postClicked(post) }
         }
     }

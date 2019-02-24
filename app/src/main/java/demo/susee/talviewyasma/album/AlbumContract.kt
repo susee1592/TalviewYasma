@@ -9,9 +9,13 @@ interface AlbumContract{
         fun showNoResult()
 
         fun showError(str:String?)
+
+        fun albumPhotos(id: Int)
     }
 
     interface Presenter{
         fun getAlbums()
+
+        fun albumClicked(id:Int)
     }
 }

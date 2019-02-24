@@ -6,6 +6,10 @@ import io.reactivex.schedulers.Schedulers
 
 class AlbumPresenter(var view: AlbumContract.View) :
     AlbumContract.Presenter {
+    override fun albumClicked(id: Int) {
+        view.albumPhotos(id)
+    }
+
     override fun getAlbums() {
         var repository = ApiService.create()
         repository.getAlbums().observeOn(AndroidSchedulers.mainThread())

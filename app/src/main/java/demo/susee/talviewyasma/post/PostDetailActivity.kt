@@ -12,7 +12,7 @@ import demo.susee.talviewyasma.Result
 import demo.susee.talviewyasma.post.comment.CommentContract
 import demo.susee.talviewyasma.post.comment.CommentPresenter
 import kotlinx.android.synthetic.main.activity_post_detail.*
-import kotlinx.android.synthetic.main.item_post.view.*
+import kotlinx.android.synthetic.main.item_comment.view.*
 
 class PostDetailActivity : AppCompatActivity(), CommentContract.View {
     var adapter: CommentAdapter? = null
@@ -25,7 +25,7 @@ class PostDetailActivity : AppCompatActivity(), CommentContract.View {
         adapter = CommentAdapter()
         commentRV.adapter = adapter
         presenter.getPost(post)
-        presenter.getComments()
+        presenter.getComments(post.id)
     }
 
     override fun showPost(post: Result.Post) {
@@ -51,7 +51,7 @@ class PostDetailActivity : AppCompatActivity(), CommentContract.View {
         class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
         override fun onCreateViewHolder(p0: ViewGroup, p1: Int): MyViewHolder {
-            return MyViewHolder(LayoutInflater.from(p0.context).inflate(R.layout.item_post, p0, false))
+            return MyViewHolder(LayoutInflater.from(p0.context).inflate(R.layout.item_comment, p0, false))
         }
 
         fun setData(result: ArrayList<Result.Comment>) {
@@ -65,8 +65,8 @@ class PostDetailActivity : AppCompatActivity(), CommentContract.View {
 
         override fun onBindViewHolder(p0: MyViewHolder, p1: Int) {
             var comment = res[p1]
-            p0.itemView.title.text = comment.name
-            p0.itemView.title.text = comment.email
+            p0.itemView.name.text = comment.name
+            p0.itemView.email.text = comment.email
             p0.itemView.body.text = comment.body
         }
     }
