@@ -33,15 +33,21 @@ class PhotoListActivity : AppCompatActivity(), PhotoContract.View {
         adapter = PhotoAdapter(presenter)
         photoRV.layoutManager = GridLayoutManager(this, 3)
         photoRV.adapter = adapter
-        presenter.getPhotos(id)
-
+        swipeRefresh.post {
+            swipeRefresh.isRefreshing=true
+            presenter.getPhotos(id) }
+        swipeRefresh.setOnRefreshListener {
+            swipeRefresh.isRefreshing=true
+            presenter.getPhotos(id) }
     }
 
     override fun showPhotos(result: ArrayList<Result.Photo>) {
+        swipeRefresh.isRefreshing=false
         adapter?.setData(result)
     }
 
     override fun showError(str: String?) {
+        swipeRefresh.isRefreshing=false
         Toast.makeText(baseContext, "No Internet Connection!", Toast.LENGTH_SHORT).show()
         repo?.allAlbums?.observe(this, Observer {
             var ite = it?.iterator()
@@ -55,6 +61,7 @@ class PhotoListActivity : AppCompatActivity(), PhotoContract.View {
     }
 
     override fun showNoResult() {
+        swipeRefresh.isRefreshing=false
         Toast.makeText(baseContext, "No Results Found!", Toast.LENGTH_SHORT).show()
     }
 

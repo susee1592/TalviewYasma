@@ -50,12 +50,17 @@
               app:layout_constraintTop_toBottomOf="@+id/titleCard"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"/>
-    <android.support.v7.widget.RecyclerView
+    <android.support.v4.widget.SwipeRefreshLayout
             android:layout_width="match_parent"
-            android:id="@+id/commentRV"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-            android:orientation="vertical"
-            app:layout_constraintTop_toBottomOf="@id/comment"
+            android:id="@+id/swipeRefresh"
             android:layout_marginTop="10dp"
-            android:layout_height="wrap_content"/>
+            app:layout_constraintTop_toBottomOf="@+id/comment"
+            android:layout_height="wrap_content">
+        <android.support.v7.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:id="@+id/commentRV"
+                app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+                android:orientation="vertical"
+                android:layout_height="wrap_content"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
 </android.support.constraint.ConstraintLayout>

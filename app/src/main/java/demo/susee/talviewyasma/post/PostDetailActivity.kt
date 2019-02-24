@@ -25,23 +25,33 @@ class PostDetailActivity : AppCompatActivity(), CommentContract.View {
         adapter = CommentAdapter()
         commentRV.adapter = adapter
         presenter.getPost(post)
-        presenter.getComments(post.id)
+        swipeRefresh.post {
+            swipeRefresh.isRefreshing=true
+            presenter.getComments(post.id) }
+        swipeRefresh.setOnRefreshListener {
+            swipeRefresh.isRefreshing=true
+            presenter.getComments(post.id) }
+
     }
 
     override fun showPost(post: Result.Post) {
+        swipeRefresh.isRefreshing=false
         titleTV.text = post.title
         bodyTV.text = post.body
     }
 
     override fun showComments(result: ArrayList<Result.Comment>) {
+        swipeRefresh.isRefreshing=false
         adapter?.setData(result)
     }
 
     override fun showError(str: String?) {
+        swipeRefresh.isRefreshing=false
         Toast.makeText(baseContext, "No Internet Connection!", Toast.LENGTH_SHORT).show()
     }
 
     override fun showNoResults() {
+        swipeRefresh.isRefreshing=false
         Toast.makeText(baseContext, "No Results Found!", Toast.LENGTH_SHORT).show()
     }
 

@@ -32,19 +32,27 @@ class AlbumFragment : Fragment(), AlbumContract.View {
         var presenter = AlbumPresenter(this, repo)
         adapter = AlbumAdapter(presenter, context)
         postList.adapter = adapter
-        presenter.getAlbums()
+        swipeRefresh.post {
+            swipeRefresh.isRefreshing=true
+            presenter.getAlbums() }
+        swipeRefresh.setOnRefreshListener {
+            swipeRefresh.isRefreshing=true
+            presenter.getAlbums() }
         super.onActivityCreated(savedInstanceState)
     }
 
     override fun showAlbums(res: ArrayList<Result.Album>) {
+        swipeRefresh.isRefreshing=false
         adapter?.setData(res)
     }
 
     override fun showNoResult() {
+        swipeRefresh.isRefreshing=false
         Toast.makeText(context, "No Results Found!", Toast.LENGTH_SHORT).show()
     }
 
     override fun showError(str: String?) {
+        swipeRefresh.isRefreshing=false
         Toast.makeText(context, "No Internet Connection!", Toast.LENGTH_SHORT).show()
         repo?.allAlbums?.observe(this, Observer {
             var ite = it?.iterator()
