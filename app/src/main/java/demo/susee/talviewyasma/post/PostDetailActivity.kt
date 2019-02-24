@@ -38,7 +38,7 @@ class PostDetailActivity : AppCompatActivity(), CommentContract.View {
     }
 
     override fun showError(str: String?) {
-        Toast.makeText(baseContext, str, Toast.LENGTH_SHORT).show()
+        Toast.makeText(baseContext, "No Internet Connection!", Toast.LENGTH_SHORT).show()
     }
 
     override fun showNoResults() {

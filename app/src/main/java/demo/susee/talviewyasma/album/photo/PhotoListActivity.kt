@@ -1,5 +1,6 @@
 package demo.susee.talviewyasma.album.photo
 
+import android.arch.lifecycle.Observer
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
@@ -14,20 +15,23 @@ import android.widget.Toast
 import com.squareup.picasso.Picasso
 import demo.susee.talviewyasma.R
 import demo.susee.talviewyasma.Result
+import demo.susee.talviewyasma.album.photo.offline.PhotoRepository
 import kotlinx.android.synthetic.main.activity_photo_list.*
 import kotlinx.android.synthetic.main.item_photo.view.*
 
 class PhotoListActivity : AppCompatActivity(), PhotoContract.View {
     var adapter: PhotoAdapter? = null
+    var repo: PhotoRepository? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_photo_list)
 
         val id = intent.getIntExtra("id", 0)
-        val presenter = PhotoPresenter(this)
+        repo = PhotoRepository(this)
+        val presenter = PhotoPresenter(this, repo)
         adapter = PhotoAdapter(presenter)
-        photoRV.layoutManager=GridLayoutManager(this,3)
+        photoRV.layoutManager = GridLayoutManager(this, 3)
         photoRV.adapter = adapter
         presenter.getPhotos(id)
 
@@ -38,7 +42,16 @@ class PhotoListActivity : AppCompatActivity(), PhotoContract.View {
     }
 
     override fun showError(str: String?) {
-        Toast.makeText(baseContext, str, Toast.LENGTH_SHORT).show()
+        Toast.makeText(baseContext, "No Internet Connection!", Toast.LENGTH_SHORT).show()
+        repo?.allAlbums?.observe(this, Observer {
+            var ite = it?.iterator()
+            var res = ArrayList<Result.Photo>()
+            while (ite?.hasNext()!!) {
+                var cr = ite?.next()
+                res.add(Result.Photo(cr.id, cr.albumId, cr.title, cr.url, cr.thumbnailUrl))
+            }
+            adapter?.setData(res)
+        })
     }
 
     override fun showNoResult() {

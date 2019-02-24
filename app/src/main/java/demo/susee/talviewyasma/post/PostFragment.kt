@@ -1,6 +1,7 @@
 package demo.susee.talviewyasma.post
 
 import android.arch.lifecycle.Observer
+import android.content.Context
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
@@ -13,7 +14,7 @@ import android.widget.Toast
 import demo.susee.talviewyasma.R
 import demo.susee.talviewyasma.Result
 import demo.susee.talviewyasma.post.offline.PostRepository
-import demo.susee.talviewyasma.user.UserPresenter
+import demo.susee.talviewyasma.user.UserRepository
 import kotlinx.android.synthetic.main.fragment_post.*
 import kotlinx.android.synthetic.main.item_post.view.*
 
@@ -27,13 +28,16 @@ class PostFragment : Fragment(), PostContract.View {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         repo = PostRepository(context)
-        var presenter = PostPresenter(this)
-        adapter = PostAdapter(presenter)
+        var userRepo = UserRepository(context)
+        var presenter = PostPresenter(this, repo,userRepo)
+        adapter = PostAdapter(presenter, context)
         postList.adapter = adapter
 
         swipeRefresh.post {
             swipeRefresh.isRefreshing = true
             presenter.getPosts()
+            presenter.getUsers()
+
         }
         swipeRefresh.setOnRefreshListener {
             swipeRefresh.isRefreshing = true
@@ -45,19 +49,6 @@ class PostFragment : Fragment(), PostContract.View {
     override fun showPosts(res: ArrayList<Result.Post>) {
         swipeRefresh.isRefreshing = false
         adapter?.setData(res)
-        object : AsyncTask<Void, Void, Void>() {
-            override fun doInBackground(vararg voids: Void): Void? {
-                if (repo?.size == 0) {
-                    var ite = res?.iterator()
-                    while (ite?.hasNext()!!) {
-                        var cr = ite?.next()
-                        repo?.insertPost(cr.id, cr.userId, cr.title, cr.body)
-                    }
-                }
-                return null
-            }
-        }.execute()
-
     }
 
     override fun postDetails(post: Result.Post) {
@@ -73,7 +64,7 @@ class PostFragment : Fragment(), PostContract.View {
 
     override fun showError(str: String?) {
         swipeRefresh.isRefreshing = false
-        Toast.makeText(context, str, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "No Internet Connection!", Toast.LENGTH_SHORT).show()
         repo?.allPosts?.observe(this, Observer {
             var ite = it?.iterator()
             var res = ArrayList<Result.Post>()
@@ -85,7 +76,10 @@ class PostFragment : Fragment(), PostContract.View {
         })
     }
 
-    class PostAdapter(var presenter: PostPresenter) : RecyclerView.Adapter<PostAdapter.MyViewHolder>() {
+    class PostAdapter(
+        var presenter: PostPresenter,
+        val context: Context?
+    ) : RecyclerView.Adapter<PostAdapter.MyViewHolder>() {
         var res: ArrayList<Result.Post> = ArrayList<Result.Post>()
 
         class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
@@ -109,7 +103,7 @@ class PostFragment : Fragment(), PostContract.View {
             p0.itemView.body.text = post.body
             object : AsyncTask<Void, Void, Void>() {
                 override fun doInBackground(vararg voids: Void): Void? {
-                    val user = UserPresenter().getUser(post.userId)
+                    val user = UserRepository(context).getUser(post.userId)
                     if (user != null) {
                         p0.itemView.name.text = user.name
                         p0.itemView.email.text = user.email

@@ -16,6 +16,8 @@ interface PostContract{
     interface Presenter{
         fun getPosts()
 
+        fun getUsers()
+
         fun postClicked(post: Result.Post)
     }
 }
