@@ -90,13 +90,7 @@ class PostFragment : Fragment(), PostContract.View {
         class MyViewHolder(view: View) : RecyclerView.ViewHolder(view)
 
         override fun onCreateViewHolder(p0: ViewGroup, p1: Int): MyViewHolder {
-            return MyViewHolder(
-                LayoutInflater.from(p0.context).inflate(
-                    R.layout.item_post,
-                    p0,
-                    false
-                )
-            )
+            return MyViewHolder(LayoutInflater.from(p0.context).inflate(R.layout.item_post, p0, false))
         }
 
         fun setData(result: ArrayList<Result.Post>) {
