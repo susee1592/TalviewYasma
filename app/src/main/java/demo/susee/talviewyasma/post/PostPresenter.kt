@@ -1,11 +1,16 @@
 package demo.susee.talviewyasma.post
 
 import demo.susee.talviewyasma.ApiService
+import demo.susee.talviewyasma.Result
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 class PostPresenter(var view: PostContract.View) :
     PostContract.Presenter {
+    override fun postClicked(post: Result.Post) {
+        view.postDetails(post)
+    }
+
     override fun getPosts() {
         var repository = ApiService.create()
         repository.getposts()

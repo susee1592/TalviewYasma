@@ -9,9 +9,13 @@ interface PostContract{
         fun showNoResult()
 
         fun showError(str:String?)
+
+        fun postDetails(post: Result.Post)
     }
 
     interface Presenter{
         fun getPosts()
+
+        fun postClicked(post: Result.Post)
     }
 }
